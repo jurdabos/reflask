@@ -1,0 +1,19 @@
+{
+    "Batch results": [
+        {
+            "Decision": "rejected",
+            "File": "cast_ok_0_16.jpeg",
+            "Raw prediction": 1
+        },
+        {
+            "Decision": "rejected",
+            "File": "cast_ok_0_19.jpeg",
+            "Raw prediction": 1
+        },
+        {
+            "Decision": "rejected",
+            "File": "cast_ok_0_22.jpeg",
+            "Raw prediction": 1
+        }
+    ]
+}

@@ -1,15 +1,23 @@
 # %%
 import cv2
-import mysql.connector
 import numpy as np
 import pickle
 import os
-from PIL import Image
 import dbAccessFunctions
 from skimage.feature import hog
 from sklearn import svm
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.preprocessing import LabelEncoder
+from PIL import Image
+from pathlib import Path
+
+
+# %%
+# Flexible pathing
+current_dir = os.getcwd()
+BASE_DIR = Path(current_dir).resolve().parent / "reflask"
+DATA_DIR = BASE_DIR / "data"
+DATAPP_DIR = BASE_DIR / "datapp"
 
 
 # %%
@@ -32,7 +40,7 @@ def check_image_format(directory_path):
 
 
 # %%
-check_image_format(r"C:\Users\jurda\PycharmProjects\Reflask\datapp")
+check_image_format(DATAPP_DIR)
 
 
 # %%
@@ -62,22 +70,10 @@ def preprocess_images(input_directory, output_directory):
 
 
 # %%
-# preprocess_images(
-#     input_directory=r"C:\Users\jurda\PycharmProjects\Reflask\data\test\approved",
-#     output_directory=r"C:\Users\jurda\PycharmProjects\Reflask\datapp\test\approved"
-# )
-# preprocess_images(
-#     input_directory=r"C:\Users\jurda\PycharmProjects\Reflask\data\test\rejected",
-#     output_directory=r"C:\Users\jurda\PycharmProjects\Reflask\datapp\test\rejected"
-# )
-# preprocess_images(
-#     input_directory=r"C:\Users\jurda\PycharmProjects\Reflask\data\train\approved",
-#     output_directory=r"C:\Users\jurda\PycharmProjects\Reflask\datapp\train\approved"
-# )
-# preprocess_images(
-#     input_directory=r"C:\Users\jurda\PycharmProjects\Reflask\data\train\rejected",
-#     output_directory=r"C:\Users\jurda\PycharmProjects\Reflask\datapp\train\rejected"
-# )
+# preprocess_images(DATA_DIR / "test" / "approved", DATAPP_DIR / "test" / "approved")
+# preprocess_images(DATA_DIR / "test" / "rejected", DATAPP_DIR / "test" / "rejected")
+# preprocess_images(DATA_DIR / "train" / "approved", DATAPP_DIR / "train" / "approved")
+# preprocess_images(DATA_DIR / "train" / "rejected", DATAPP_DIR / "train" / "rejected")
 
 
 # %%
@@ -109,21 +105,13 @@ def load_images_and_labels(directory_path):
 
 
 # %%
-train_data, train_labels = load_images_and_labels(r"C:\Users\jurda\PycharmProjects\Reflask\datapp\train")
-test_data, test_labels = load_images_and_labels(r"C:\Users\jurda\PycharmProjects\Reflask\datapp\test")
+TEST_DIR = DATAPP_DIR / "test"
+train_data, train_labels = load_images_and_labels(DATAPP_DIR / "train")
+test_data, test_labels = load_images_and_labels(TEST_DIR)
+
 
 # %%
-db_configuration = {
-    "host": "localhost",
-    "user": "root",
-    "password": "12",
-    "database": "reflask",
-    "use_pure": "True"
-}
-
-# %%
-base_folder = r"C:\Users\jurda\PycharmProjects\Reflask\datapp"
-for root, dirs, files in os.walk(base_folder):
+for root, dirs, files in os.walk(DATAPP_DIR):
     if "approved" in root.lower():
         label = "approved"
     elif "rejected" in root.lower():
@@ -135,7 +123,7 @@ for root, dirs, files in os.walk(base_folder):
             file_path = os.path.join(root, file_name)
             print(f"Inserting {file_path} with label {label}")
             try:
-                dbAccessFunctions.insert_image_metadata(db_configuration, file_path, label)
+                dbAccessFunctions.insert_image_metadata(dbAccessFunctions.db_configuration, file_path, label)
             except Exception as e:
                 print(f"Error inserting into database: {e}")
 
@@ -157,27 +145,28 @@ def extract_features(images):
 train_features = extract_features(train_data)
 test_features = extract_features(test_data)
 
-# %% [Encode Labels]
+# %%
 label_encoder = LabelEncoder()
 train_labels_encoded = label_encoder.fit_transform(train_labels)
 test_labels_encoded = label_encoder.transform(test_labels)
 
-# %% [Train and Evaluate Model]
-# Training an SVM classifier
+# %%
 clf = svm.SVC(kernel='rbf', C=1, gamma=0.01)
 clf.fit(train_features, train_labels_encoded)
-# Predicting on the test set
+# Predicting on test set
 predictions = clf.predict(test_features)
-# Evaluating the model
+# Evaluating model
 print(classification_report(test_labels_encoded, predictions))
 print(f"Accuracy: {accuracy_score(test_labels_encoded, predictions)}")
 
+# %% Storing test classification in db
+file_paths_test = [str(file) for file in TEST_DIR.rglob('*') if file.is_file()]
+dbAccessFunctions.store_results_to_db(dbAccessFunctions.db_configuration,
+                                      predictions,
+                                      test_labels_encoded,
+                                      file_paths_test)
 
-# %% [Store Results in Database]
-file_paths_test = [os.path.join(r"C:\Users\jurda\PycharmProjects\Reflask\datapp\test", f)
-                   for f in os.listdir(r"C:\Users\jurda\PycharmProjects\Reflask\datapp\test")]
-
-dbAccessFunctions.store_results_to_db(db_configuration, predictions, test_labels_encoded, file_paths_test)
-
-# with open('model.pkl', 'wb') as file:
-#     pickle.dump(model, file)
+# %%
+# Packaging
+with open('modell.pkl', 'wb') as file:
+    pickle.dump(clf, file)
