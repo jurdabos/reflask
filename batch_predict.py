@@ -3,7 +3,6 @@ import dbAccessFunctions
 import json
 import os
 from pathlib import Path
-from PIL import Image
 import requests
 
 # Folder paths
@@ -19,7 +18,8 @@ url = "http://127.0.0.1:5000/predict_batch"
 
 
 def batch_predict():
-    processed_files = dbAccessFunctions.fetch_processed_files()
+    processed_files = dbAccessFunctions.fetch_processed_files(dbAccessFunctions.db_configuration)
+    print(processed_files)
     files_to_process = [
         ('files', (file, open(os.path.join(image_folder, file), 'rb')))
         for file in os.listdir(image_folder)
@@ -44,7 +44,7 @@ def batch_predict():
             print(f"Batch prediction results saved to {output_file}")
             # Marking files as processed
             for _, file_info in files_to_process:
-                dbAccessFunctions.save_processed_file(file_info[0])
+                dbAccessFunctions.save_processed_file(dbAccessFunctions.db_configuration, file_info[0])
         else:
             print(f"Error: {response.status_code}, {response.text}")
     except Exception as e:
