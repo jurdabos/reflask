@@ -53,8 +53,8 @@ def drop_database(db_name):
     my_db.close()
 
 
-def fetch_processed_files():
-    connection = get_db_connection()
+def fetch_processed_files(db_kon):
+    connection = get_db_connection(**db_kon)
     cursor = connection.cursor()
     cursor.execute("SELECT file_name FROM predicted_images")
     processed_files = {row[0] for row in cursor.fetchall()}
@@ -111,8 +111,8 @@ def print_table_data(database_name, table_name):
     my_db.close()
 
 
-def save_processed_file(file_name):
-    connection = get_db_connection()
+def save_processed_file(db_k, file_name):
+    connection = get_db_connection(**db_k)
     cursor = connection.cursor()
     cursor.execute(
         "INSERT INTO predicted_images (file_name, prediction_date) VALUES (%s, NOW())",

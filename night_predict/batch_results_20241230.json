@@ -1,0 +1,34 @@
+{
+    "Batch results": [
+        {
+            "Decision": "rejected",
+            "File": "cast_def_0_150.jpeg",
+            "Raw prediction": 1
+        },
+        {
+            "Decision": "approved",
+            "File": "cast_def_0_732.jpeg",
+            "Raw prediction": 0
+        },
+        {
+            "Decision": "approved",
+            "File": "cast_def_0_811.jpeg",
+            "Raw prediction": 0
+        },
+        {
+            "Decision": "rejected",
+            "File": "cast_ok_0_16.jpeg",
+            "Raw prediction": 1
+        },
+        {
+            "Decision": "rejected",
+            "File": "cast_ok_0_19.jpeg",
+            "Raw prediction": 1
+        },
+        {
+            "Decision": "rejected",
+            "File": "cast_ok_0_22.jpeg",
+            "Raw prediction": 1
+        }
+    ]
+}
