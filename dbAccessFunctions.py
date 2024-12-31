@@ -24,10 +24,8 @@ def batch_insert_image_metadata(db_configur, image_data):
             connection.close()
 
 
-def create_database(db_name):
-    my_db = mysql.connector.connect(host='localhost',
-                                    user='root',
-                                    password='12')
+def create_database(db_konphig, db_name):
+    my_db = mysql.connector.connect(**db_konphig)
     my_cursor = my_db.cursor()
     create_db_query = "CREATE DATABASE IF NOT EXISTS {}".format(db_name)
     my_cursor.execute(create_db_query)
@@ -43,10 +41,8 @@ db_configuration = {
 }
 
 
-def drop_database(db_name):
-    my_db = mysql.connector.connect(host='localhost',
-                                    user='root',
-                                    password='12')
+def drop_database(db_konph, db_name):
+    my_db = mysql.connector.connect(**db_konph)
     my_cursor = my_db.cursor()
     drop_db_query = "DROP DATABASE {}".format(db_name)
     my_cursor.execute(drop_db_query)
@@ -95,11 +91,8 @@ def insert_image_metadata(db_konf_iim, file_path, label):
             connection.close()
 
 
-def print_table_data(database_name, table_name):
-    my_db = mysql.connector.connect(host='localhost',
-                                    user='root',
-                                    password='12',
-                                    database=database_name)
+def print_table_data(db_conf_ptd, table_name):
+    my_db = mysql.connector.connect(**db_conf_ptd)
     my_cursor = my_db.cursor()
     query = "SELECT * FROM {}".format(table_name)
     my_cursor.execute(query)
@@ -123,11 +116,8 @@ def save_processed_file(db_k, file_name):
     connection.close()
 
 
-def show_table_data(database_name, table_name):
-    my_db = mysql.connector.connect(host='localhost',
-                                    user='root',
-                                    password='12',
-                                    database=database_name)
+def show_table_data(db_conf_std, table_name):
+    my_db = mysql.connector.connect(**db_conf_std)
     my_cursor = my_db.cursor()
     query = "SELECT * FROM {}".format(table_name)
     my_cursor.execute(query)
@@ -175,9 +165,9 @@ def store_results_to_db(db_config, predictions, test_labels, file_paths):
             connection.close()
 
 
-def update_image_processed_status(db_configuration, image_id, processed=True):
+def update_image_processed_status(db_conf_uips, image_id, processed=True):
     try:
-        connection = mysql.connector.connect(**db_configuration)
+        connection = mysql.connector.connect(**db_conf_uips)
         cursor = connection.cursor()
         query = "UPDATE images SET processed = %s WHERE id = %s"
         cursor.execute(query, (processed, image_id))
