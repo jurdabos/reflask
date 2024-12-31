@@ -19,7 +19,6 @@ url = "http://127.0.0.1:5000/predict_batch"
 
 def batch_predict():
     processed_files = dbAccessFunctions.fetch_processed_files(dbAccessFunctions.db_configuration)
-    print(processed_files)
     files_to_process = [
         ('files', (file, open(os.path.join(image_folder, file), 'rb')))
         for file in os.listdir(image_folder)
