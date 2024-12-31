@@ -1,7 +1,6 @@
-@echo off
-cd C:\Users\jurda\PycharmProjects\Reflask
+echo Activating virtual environment...
 call .venv\Scripts\activate.bat
-
+echo Running Flask app...
 python app.py
-
+echo Deactivating virtual environment...
 deactivate

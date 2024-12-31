@@ -7,6 +7,7 @@ from PIL import Image
 import io
 import logging
 from skimage.feature import hog
+import urllib
 
 logging.basicConfig(level=logging.INFO)
 
@@ -69,6 +70,11 @@ def preprocess_images_batch(image_list):
             raise ValueError(f"Error in preprocessing batch: {str(e)}")
     # Returning as a NumPy array
     return np.array(preprocessed_images)
+
+
+@app.route("/")
+def home():
+    return "Hello, esteemed anyone! This is the base page of study project Reflask."
 
 
 # Adding functionality to enable getting predictions
@@ -147,6 +153,15 @@ def predict_batch():
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/routes")
+def list_routes():
+    output = []
+    for rule in app.url_map.iter_rules():
+        methods = ','.join(rule.methods)
+        output.append(f"{rule.endpoint}: {rule} [{methods}]")
+    return "<br>".join(sorted(output))
 
 
 if __name__ == "__main__":
