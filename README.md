@@ -48,11 +48,11 @@ pip install .
 This project requires a MySQL database to function.<br>
 To connect to the database, you need to set the following environment variables in your operating system:<br>
 
-Variable Name	Description	                Example Value<br>
-MyDB_HOST	    Database host	            localhost<br>
-MyDB_USER	    Database user	            root<br>
-MyDB_PASSWORD	Database password	        your_password<br>
-MyDB_DATABASE	Name of the database to     use	reflask<br>
+Variable Name = Example Value<br>
+MyDB_HOST = localhost<br>
+MyDB_USER = root<br>
+MyDB_PASSWORD = your_password<br>
+MyDB_DATABASE = reflask<br>
 
 ## Steps to Set Environment Variables
 
