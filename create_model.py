@@ -1,5 +1,6 @@
 # %%
 import cv2
+import mlflow
 import numpy as np
 import pickle
 import os
@@ -11,6 +12,9 @@ from sklearn.preprocessing import LabelEncoder
 from PIL import Image
 from pathlib import Path
 
+# %%
+# Setting up logging
+mlflow.autolog()
 
 # %%
 # Flexible pathing
@@ -158,6 +162,10 @@ predictions = clf.predict(test_features)
 # Evaluating model
 print(classification_report(test_labels_encoded, predictions))
 print(f"Accuracy: {accuracy_score(test_labels_encoded, predictions)}")
+
+# %%
+# Now we can check results with the command mlflow ui from a CLI, then visiting localhost:5000
+# Tested. Worked well.
 
 # %% Storing test classification in db
 file_paths_test = [str(file) for file in TEST_DIR.rglob('*') if file.is_file()]
