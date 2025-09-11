@@ -135,3 +135,6 @@ test_output.*
 *.pot
 webdrivers/
 .wdm/
+
+# Ignore MLflow run artifacts
+mlruns/
