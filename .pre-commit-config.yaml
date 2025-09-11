@@ -8,6 +8,6 @@ repos:
 
   # gitleaks hook (native binary)
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.28.0              # a known tag; then run `pre-commit autoupdate` to bump
+    rev: v8.24.2              # a known tag; then run `pre-commit autoupdate` to bump
     hooks:
       - id: gitleaks
