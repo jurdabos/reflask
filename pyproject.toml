@@ -1,7 +1,7 @@
 [project]
 name = "reflask"
 version = "0.1.0"
-description = "Add your description here"
+description = "AI-based solution w/ deployment and scheduled auto-batching for binary visual classification"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -13,4 +13,5 @@ dependencies = [
     "scikit-image>=0.25.2",
     "scikit-learn>=1.7.1",
     "setuptools>=80.9.0",
+    "mlflow~=2.20.3",
 ]
