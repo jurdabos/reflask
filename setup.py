@@ -6,7 +6,7 @@ with open("requirements.txt", "r") as f:
 setup(
     name='Reflask',
     packages=find_packages(exclude=['examples']),
-    version='0.0.1',
+    version='0.2.0',
     license='MIT',
     description='Reflask: study project for IU class From Model to Production',
     author='Torda Balázs',

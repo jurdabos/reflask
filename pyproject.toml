@@ -1,6 +1,6 @@
 [project]
 name = "reflask"
-version = "0.1.0"
+version = "0.2.0"
 description = "AI-based solution w/ deployment and scheduled auto-batching for binary visual classification"
 readme = "README.md"
 requires-python = ">=3.12"
